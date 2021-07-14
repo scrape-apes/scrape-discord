@@ -3,6 +3,7 @@ dotenv.config()
 import Discord from 'discord.js';
 import { search, city } from './lib/utils/discord-utils.js';
 import ScraperService from '../scrape-discord/lib/services/ScraperService.js';
+import tinyurl from 'tinyurl-api';
 
 const client = new Discord.Client();
 
@@ -23,10 +24,12 @@ client.on('message', async (message) => {
     cityTerm = city(message.content);
   }
   const results = await ScraperService.fetchSearchResults(searchTerm, cityTerm);
-  console.log(results);
-  message.channel.send(results.map(result => {
-    return `${result.link}`;
-  }));
+  // const url = await tinyurl(`${results[0].link}`)
+  // console.log(url);
+
+  message.channel.send(await Promise.all(results.map(result => {
+    return tinyurl(`${result.link}`);
+  })));
 });
 
 client.login(process.env.DISCORD_TOKEN);
