@@ -26,13 +26,19 @@ client.on('message', async (message) => {
   const results = await ScraperService.fetchSearchResults(searchTerm, cityTerm);
 
   const tiny = await Promise.all(results.map(result => tinyurl(`${result.link}`)));
-
-  console.log(tiny);
-
-  message.channel.send(await Promise.all(tiny.map(result => {
-    // return `<${result.link}>`;
-
-    return `${result}`;
+  
+  message.channel.send(await Promise.all(results.map(result => {
+  //   // return `<${result.link}>`;
+    console.log(result[0]);
+    const embed = new Discord.MessageEmbed()
+      .setTitle(`${result.title}`)
+      .setURL(`${result.link}`)
+      .setDescription(`${result.price}`)
+      .setThumbnail(`${result.image}`);
+    
+    message.channel.send(embed);
+    
+    // return `${result}`;
   })));
 });
 
