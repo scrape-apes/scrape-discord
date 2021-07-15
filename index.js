@@ -24,22 +24,19 @@ client.on('message', async (message) => {
     cityTerm = city(message.content);
   }
   const results = await ScraperService.fetchSearchResults(searchTerm, cityTerm);
-
   const tiny = await Promise.all(results.map(result => tinyurl(`${result.link}`)));
-  
-  message.channel.send(await Promise.all(results.map(result => {
-  //   // return `<${result.link}>`;
-    console.log(result[0]);
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`${result.title}`)
-      .setURL(`${result.link}`)
-      .setDescription(`${result.price}`)
-      .setThumbnail(`${result.image}`);
-    
-    message.channel.send(embed);
-    
-    // return `${result}`;
-  })));
+
+  const embed = new Discord.MessageEmbed()
+    .setColor('#0099ff')
+    .setTitle(`Results for ${searchTerm} in ${cityTerm}`)
+    .setThumbnail('https://sendbird.com/wp-content/uploads/20180629_marketplace@2x.png')
+    .setTimestamp()
+
+  results.map((result, index) => {
+    embed.addField(`${result.title}\n${result.price}`, `${tiny[index]}`, true)
+  });
+
+  message.channel.send(embed);
 });
 
 client.login(process.env.DISCORD_TOKEN);
