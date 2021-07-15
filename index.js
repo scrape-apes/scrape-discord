@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config()
+dotenv.config();
 import Discord from 'discord.js';
 import { search, city } from './lib/utils/discord-utils.js';
 import ScraperService from '../scrape-discord/lib/services/ScraperService.js';
@@ -24,11 +24,15 @@ client.on('message', async (message) => {
     cityTerm = city(message.content);
   }
   const results = await ScraperService.fetchSearchResults(searchTerm, cityTerm);
-  // const url = await tinyurl(`${results[0].link}`)
-  // console.log(url);
 
-  message.channel.send(await Promise.all(results.map(result => {
-    return tinyurl(`${result.link}`);
+  const tiny = await Promise.all(results.map(result => tinyurl(`${result.link}`)));
+
+  console.log(tiny);
+
+  message.channel.send(await Promise.all(tiny.map(result => {
+    // return `<${result.link}>`;
+
+    return `${result}`;
   })));
 });
 
