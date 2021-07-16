@@ -1,14 +1,17 @@
 {
   "cSpell.words": [
+    "city",
     "craiglist",
     "craigs",
     "craigslist",
     "entries",
     "list",
+    "munge",
     "results",
     "scraper",
     "search",
     "tinyurl",
     "varagesale"
-  ]
+  ],
+  "cSpell.ignoreWords": ["document"]
 }
